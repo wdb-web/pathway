@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: plot_chor is plot metaProfiler data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for plot_chor {pathways}"><tr><td>plot_chor {pathways}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>plot_chor is plot metaProfiler data</h2>
+
+<h3>Description</h3>
+
+<p>plot_chor is plot metaProfiler data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+plot_chor(
+  f = f,
+  metaProfiler,
+  scale_height = 0.6,
+  begin = 0,
+  pathways_scale_color = structure(c(-log(0.05), -log(0.01)), names = c("red", "blue")),
+  directional = 0,
+  annotationTrack = NULL,
+  line_scale_col = NULL,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>f</code></td>
+<td>
+<p>using dplyr to filter data</p>
+</td></tr>
+<tr valign="top"><td><code>metaProfiler</code></td>
+<td>
+<p>metaProfiler data</p>
+</td></tr>
+<tr valign="top"><td><code>pathways_scale_color</code></td>
+<td>
+<p>pathways bar color</p>
+</td></tr>
+<tr valign="top"><td><code>directional</code></td>
+<td>
+<p>https://jokergoo.github.io/circlize_book/book/</p>
+</td></tr>
+<tr valign="top"><td><code>annotationTrack</code></td>
+<td>
+<p>https://jokergoo.github.io/circlize_book/book/</p>
+</td></tr>
+<tr valign="top"><td><code>line_scale_col</code></td>
+<td>
+<p>line color</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>https://jokergoo.github.io/circlize_book/book/</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a list of length ,you can using packLegend and draw to add length
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+load(system.file("data", "Tes.Rdata",package = "pathways"))
+ n@kegg_analyst$compareClusterResult%&gt;%clusterProfiler::filter(
+Description%in%c((n@kegg_analyst$compareClusterResult%&gt;%group_by(Description)%&gt;%
+                    summarise(n=n()&gt;1))%&gt;%dplyr::filter(n==T)%&gt;%.$Description)|qvalue     &lt;0.05
+)%&gt;%as.data.frame()-&gt;f
+circos.clear()
+circos.par(cell.padding = c(0, 0, 0, 0), points.overflow.warning = FALSE,start.degree=90)
+plot_chor(f,metaProfiler = n)-&gt;v
+#looking for ComplexHeatmap[https://jokergoo.github.io/ComplexHeatmap-reference/book/legends.html]
+pd = packLegend(list =  v)
+draw(pd, x = unit(1, "cm"), y = unit(1, "cm"), just = c("left", "bottom"))
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>pathways</em> version 0.1.4 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

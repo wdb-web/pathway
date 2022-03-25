@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: easy.clusterProfiler</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for easy.clusterProfiler {pathways}"><tr><td>easy.clusterProfiler {pathways}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>easy.clusterProfiler</h2>
+
+<h3>Description</h3>
+
+<p>The easy to plot clusterProfiler
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+easy.clusterProfiler()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>keggline</code></td>
+<td>
+<p>A clusterProfiler data</p>
+</td></tr>
+<tr valign="top"><td><code>bar.col</code></td>
+<td>
+<p>a vector scale of bar  colour </p>
+</td></tr>
+<tr valign="top"><td><code>line.col</code></td>
+<td>
+<p>a vector scale of line colour </p>
+</td></tr>
+<tr valign="top"><td><code>bar.height.scale</code></td>
+<td>
+<p>kegg pathway bar max height </p>
+</td></tr>
+<tr valign="top"><td><code>gean.name</code></td>
+<td>
+<p>if TURE will add gean name </p>
+</td></tr>
+<tr valign="top"><td><code>pathway.name</code></td>
+<td>
+<p>if TURE will add pathway name </p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The easy to plot clusterProfiler of <code>clusterProfiler data</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(clusterProfiler)
+x&lt;-readxl::read_excel(paste(system.file("data", package = "pathways"),
+           "Col-top50.xlsx",sep = "/"))
+library(org.Mm.eg.db)
+library(pathways)
+data&lt;- bitr(x$Gene, fromType = "ENSEMBL", toType = c( "ENTREZID"), OrgDb = org.Mm.eg.db)
+#kegg using mmu
+kegg &lt;- enrichKEGG(
+  gene =data$ENTREZID,
+  keyType = "kegg",
+  organism  = 'mmu',
+  pvalueCutoff  = 1,
+  pAdjustMethod  = "BH",
+  qvalueCutoff  = 1
+)
+
+easy.clusterProfiler(keggline = kegg@result,name.begin =6, gean.name = F,
+                     bar.height.scale = 1,scale =T)
+# x,y,col
+x[,c(1:5)]-&gt;plotdata
+colnames(data)[1]&lt;-colnames(plotdata)[1]
+dplyr::left_join(data,plotdata,colnames(plotdata)[1])[,-1]-&gt;plot
+plot[,-1]
+plot
+  tidyr::pivot_longer(cols =  -ENTREZID)
+add.do(x=plotnewdata$ENTREZID,h=plotnewdata$name,
+       col = plotnewdata$value,scale_height = 0.5)-&gt;heatmap1
+
+# x,y,col
+
+x[,c(7:11)]-&gt;plotdata
+
+plot[,-1]
+plot
+  tidyr::pivot_longer(cols =  -ENTREZID)
+plotnewdata$value[is.nan( plotnewdata$value)]&lt;-0
+add.do(x=plotnewdata$ENTREZID,h=plotnewdata$name,scale_height = 0.5,begin = 0.6,
+       col = plotnewdata$value)-&gt;heatmap2
+
+#name
+pas &lt;- function(.x,.y) {
+  paste(rep(" ",time=.y),.x,sep = "")
+
+}
+rep(" ",1)
+
+map2_chr(plotnewdata$ENTREZID,
+         {str_length(plotnewdata$ENTREZID)
+             max-str_length(plotnewdata$ENTREZID)},
+         pas)-&gt;namw
+
+
+# add name
+
+add.name(x=plotnewdata$ENTREZID,begin = 10,adj = c(0,0.5),
+         name = namw,col = "black")
+
+
+lgd_list_vertical = packLegend(heatmap1)
+draw(lgd_list_vertical, x = unit(200,"mm"), y = unit(0.5,"mm"), just = c("left", "bottom"))
+
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>pathways</em> version 0.1.4 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

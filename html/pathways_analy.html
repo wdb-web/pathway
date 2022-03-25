@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: pathways_analy to pathways and analy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for pathways_analy {pathways}"><tr><td>pathways_analy {pathways}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>pathways_analy to pathways and analy</h2>
+
+<h3>Description</h3>
+
+<p>pathways_analy to pathways and analy
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+pathways_analy(
+  data,
+  group,
+  org = "hsa",
+  p_model = c("phyper", "fisher"),
+  scale = T,
+  p.adjust.methods = "holm",
+  import_model = c("betweenness", "degree")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a list of data</p>
+</td></tr>
+<tr valign="top"><td><code>group</code></td>
+<td>
+<p>data group</p>
+</td></tr>
+<tr valign="top"><td><code>org</code></td>
+<td>
+<p>looking for https://www.genome.jp/kegg/catalog/org_list.html,using fread to keggAPI</p>
+</td></tr>
+<tr valign="top"><td><code>scale</code></td>
+<td>
+<p>scale of data ,It well to .get_data_analyst_plot</p>
+</td></tr>
+<tr valign="top"><td><code>p.adjust.methods</code></td>
+<td>
+<p>looking for  p.adjust</p>
+</td></tr>
+<tr valign="top"><td><code>import_model</code></td>
+<td>
+<p>import_model=c(&quot;betweenness&quot;,&quot;degree&quot;)</p>
+</td></tr>
+<tr valign="top"><td><code>fisher.alternative</code></td>
+<td>
+<p>alternative  of fisher.test</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>metaProfiler data
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+## Not run: 
+
+x&lt;-readxl::read_xlsx(system.file("data", "Col-top50.xlsx", package = "pathways"))
+y&lt;-readxl::read_xlsx(system.file("data", "metadata.xlsx", package = "pathways"))
+CTSgetR::CTSgetR(y$Sample,"PubChem CID", "KEGG")%&gt;%na.omit()-&gt;getkeggnames
+full_join(getkeggnames,y,by=c("id"="Sample"),keep=T)-&gt;getkegg
+getkegg$Sample[!is.na(getkegg$KEGG)]&lt;-getkegg$KEGG[!is.na(getkegg$KEGG)]
+getkegg$Sample[!is.na(getkegg$KEGG)]&lt;-getkegg$KEGG[!is.na(getkegg$KEGG)]
+getkegg%&gt;%.[,-c(1:2)]%&gt;%na.omit()-&gt;data
+data[rev(order(data$Sample)),]-&gt;data2
+rownames(data2)&lt;-data2$Sample
+data2[,-1]-&gt;data2
+library(biomaRt)
+mart &lt;- useMart("ensembl","mmusculus_gene_ensembl")
+gene_name&lt;-getBM(attributes=c("ensembl_gene_id","entrezgene_id"),
+                 filters = "ensembl_gene_id",values = x$Gene, mart = mart)
+full_join(gene_name,x,by=c("ensembl_gene_id"="Gene"))-&gt;getkegg
+getkegg$ensembl_gene_id[!is.na(getkegg$entrezgene_id)]&lt;-getkegg$entrezgene_id[!is.na(getkegg$entrezgene_id)]
+getkegg[,-2]-&gt;genes
+rownames(genes)&lt;-genes$ensembl_gene_id
+genes[,-1]-&gt;genes
+group&lt;-c(rep("A",4),rep("B",5))
+colnames(data2)&lt;-colnames(genes)
+list(a=data2%&gt;%t%&gt;%as.data.frame(),b=genes%&gt;%t%&gt;%as.data.frame())-&gt;data
+pathways_analy(data = data,group = group,org = "mmu",scale = T)-&gt;n
+
+# or
+load(system.file("data", "Tes.Rdata",package = "pathways"))
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>pathways</em> version 0.1.4 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

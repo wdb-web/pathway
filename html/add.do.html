@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: add.do</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for add.do {pathways}"><tr><td>add.do {pathways}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+add.do
+</h2>
+
+<h3>Usage</h3>
+
+<pre>
+add.do(x = x, h = h, col = col, .order = NA, begin = 0, position = "fill", scale_height = 1, scale.col = NA)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>A numeric vector or a character,is circlize current sector index ,using  <code>get.current.sector.index()</code> to reading
+</p>
+</td></tr>
+<tr valign="top"><td><code>h</code></td>
+<td>
+
+<p>A numeric vector or a character. If it is a character, will scale  to the height of heatmap.
+</p>
+</td></tr>
+<tr valign="top"><td><code>col</code></td>
+<td>
+
+<p>A numeric vector or a character. If it is a character, will scale  to the height of heatmap.
+Gradient
+</p>
+</td></tr>
+<tr valign="top"><td><code>.order</code></td>
+<td>
+
+<p>A vector color or histogram and sorting of the heatmap
+</p>
+</td></tr>
+<tr valign="top"><td><code>begin</code></td>
+<td>
+
+<p>Starting position
+</p>
+</td></tr>
+<tr valign="top"><td><code>position</code></td>
+<td>
+
+<p>position=c(&quot;fill&quot;,&quot;stack&quot;),
+&quot;stack&quot; is Stacked histogram ,&quot;fill is percentage
+</p>
+</td></tr>
+<tr valign="top"><td><code>scale_height</code></td>
+<td>
+
+<p>Standardized height
+</p>
+</td></tr>
+<tr valign="top"><td><code>scale.col</code></td>
+<td>
+
+<p>A color vector, name is String or number</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>dongbin wang,chao chen
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+# data col
+data = data.frame(from = rep(letters[1:3],each=3), to = LETTERS[1:3], value = 1:3)
+structure(c("red"), names = c("a"))-&gt;col
+
+
+set.seed(2)
+#heatmap
+x=rep(c("a","b","c"),3);
+col&lt;-(c("a","b","c","e","f","a","c","c","A"));
+#col= rnorm(9) ;
+h=rep(c("a","b","c"),each=3);
+structure(c("red","blue","grey"), names = c("a",-1,5))-&gt;scale.col
+structure(c("red","blue","grey"), names = c("e","d","c"))-&gt;scale.col
+.order&lt;-c("a","b","c")
+
+structure(c(max(col),median(col),min(col)),
+          names = c("red","grey","blue"
+          ))-&gt;scale.col
+chord(data,col=col,scale = F)-&gt;chor
+
+add.do(x=x,h=h,col=col,begin=-0.1,.order =.order,scale.col = scale.col ,
+       scale_height = 0.5)-&gt;len
+
+
+add.do(x=x,h=h,col=col,begin=0.5,.order =.order,scale.col = scale.col ,
+       scale_height = 0.5)-&gt;len
+
+#draw(h)
+
+#draw(len)
+
+#bar
+h=c(1,2,3,0.5);
+x=c("A","B","C","A");
+col&lt;-c("a","e","a","b")
+structure(c("red","blue","grey"), names = c("a",-1,5))-&gt;scale.col
+structure(c("red","blue","black"), names = c("e","d","c"))-&gt;scale.col
+.order&lt;-c("a","b","e")
+
+add.do(x=x,h=h,col=col,begin=-0.1,position = "stack",
+       scale_height = 0.6)-&gt;len2
+
+add.do(x=x,h=h,col=col,begin=0.9,position = "stack",
+       scale_height = 0.6)-&gt;len2
+
+x=c("a","b","c","a");
+col&lt;-c("a","e","a","b")
+structure(c("red","blue","grey"), names = c("a",-1,5))-&gt;scale.col
+structure(c("red","blue","black"), names = c("e","d","c"))-&gt;scale.col
+.order&lt;-c("a","b","e")
+#add.do(x=x,h=h,col=col,begin=0.5,position = "fill",scale_height = 0.4)-&gt;len3
+
+x=c("a","b","c");h=c(1:3);col=(1:3)
+structure(c("red","black","blue"), names = c(1,2.7,3))-&gt;scale.col
+
+add.do(x=x,h=h,col=col,begin=0.6,scale_height = 0.3,
+       scale.col=scale.col)-&gt;len3
+
+add.do(x=x,h=h,col=col,begin=0.8,
+       scale_height = 0.8,scale.col=scale.col)-&gt;len3
+
+
+
+
+x=c("a","b","c") ;name=c("ggplot","gglen","wanf")
+
+add.name(x,name,begin =9)
+
+
+
+x=rep(c("a","b","c"),3);
+#col= rnorm(9) ;
+h=rep(c("a","b","c"),each=3);
+pch&lt;-c("a","b","c")
+.order&lt;-c("a","c","b")
+structure(c("a","b","c"), names = c(1,2,3))-&gt;scale.pch
+
+
+add.pch(x=x,h=h,pch=pch,begin =2,
+        scale_height = 3,col="red")
+
+
+
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>pathways</em> version 0.1.4 <a href="00Index.html">Index</a>]</div>
+</div></body></html>
